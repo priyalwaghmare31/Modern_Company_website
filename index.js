@@ -5,7 +5,7 @@ const path = require('path');
 const db = require('./db');
 
 const app = express();
-const PORT = process.env.PORT || 3000; // Render provides PORT
+const PORT = process.env.PORT || 3000; // Use Render's PORT or fallback to 3000
 
 app.use(cors());
 app.use(express.json());
@@ -122,7 +122,8 @@ app.post('/api/subscribe', (req, res) => {
 // Optional: static folder
 app.use('/server-static', express.static(path.join(__dirname, 'public')));
 
-// Start server
+// Start server with correct URL for Render
 app.listen(PORT, () => {
-  console.log(`Backend running on port ${PORT}`);
+  const publicURL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
+  console.log(`Backend running at: ${publicURL}`);
 });
